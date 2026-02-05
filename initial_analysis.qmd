@@ -11,20 +11,6 @@ library(jsonlite)
 library(httr)
 ```
 
-# Load in Data
-```{r}
-crops <- read.csv(here('data','Crop_recommendation.csv'))
-```
-
-```{r}
-# Crop Type
-unique(crops$label)
-
-str(crops)
-```
-
-
-
 # Marvel Rivals API
 ```{r}
 
@@ -101,219 +87,263 @@ heroes_df <- fromJSON(res, flatten = TRUE) %>%
   as_tibble()
 
 heroes_df
-
 ```
 
+# Load in Data Using API
+## S6 - Marvel Rivals API
+Season 6- Still in progress - New season comes out in 9days. Feb. 12
+### Retrieving information for my own player
+```{r}
+# Marvel Rivals API
+
+# Your API key
+# api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
+# USERNAME <- "kpil11"
+# SEASON <- "6"  # Season 6
+# 
+# # Game mode values (based on API documentation):
+# # 0 = Quick Match
+# # 1 = Competitive/Ranked
+# 
+# # Function to get match history by game mode
+# get_matches_by_mode <- function(username, season, game_mode, api_key) {
+#   response <- GET(
+#     url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
+#     query = list(
+#       season = season,
+#       game_mode = game_mode
+#     ),
+#     add_headers("x-api-key" = api_key)
+#   )
+#   
+#   if (status_code(response) == 200) {
+#     data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+#     return(data$match_history)
+#   } else {
+#     warning(paste("Error:", status_code(response)))
+#     return(NULL)
+#   }
+# }
+# 
+# # Get COMPETITIVE matches only
+# s6_competitive_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 1, api_key)
+# 
+# # Get QUICK MATCH matches only
+# s6_quick_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 0, api_key)
+# 
+# # Convert to dataframes
+# if (!is.null(s6_competitive_matches)) {
+#   s6_comp_df <- bind_rows(s6_competitive_matches)
+#   s6_comp_df$mode <- "Competitive"
+#   write.csv(s6_comp_df, here("output/s6_competitive_matches.csv"), row.names = FALSE)
+#   print(paste("Season 6 Competitive matches:", nrow(s6_comp_df)))
+# }
+# 
+# if (!is.null(s6_quick_matches)) {
+#   s6_quick_df <- bind_rows(s6_quick_matches)
+#   s6_quick_df$mode <- "Quick Match"
+#   write.csv(s6_quick_df, here("output/s6_quick_matches.csv"), row.names = FALSE)
+#   print(paste("Season 6 Quick matches:", nrow(s6_quick_df)))
+# }
+```
+
+## S5 - Marvel Rivals API
+Season 5
 ```{r}
 
 # Your API key
-api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
-
-# GET request with headers
-res <- GET(
-  url = "https://marvelrivalsapi.com/api/v2/players/leaderboard?page=1&limit=50",
-  add_headers(`x-api-key` = api_key)
-)
-
-# Parse JSON
-res_json <- content(res, as = "text")
-res_list <- fromJSON(res_json, flatten = TRUE)
-
-# Convert to tibble
-leaderboard_df <- as_tibble(res_list)
-
-head(leaderboard_df)
-
-
+# api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
+# USERNAME <- "kpil11"
+# SEASON <- "5"  # Season 5
+# 
+# # Game mode values (based on API documentation):
+# # 0 = Quick Match
+# # 1 = Competitive/Ranked
+# 
+# # Function to get match history by game mode
+# get_matches_by_mode <- function(username, season, game_mode, api_key) {
+#   response <- GET(
+#     url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
+#     query = list(
+#       season = season,
+#       game_mode = game_mode
+#     ),
+#     add_headers("x-api-key" = api_key)
+#   )
+#   
+#   if (status_code(response) == 200) {
+#     data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+#     return(data$match_history)
+#   } else {
+#     warning(paste("Error:", status_code(response)))
+#     return(NULL)
+#   }
+# }
+# 
+# # Get COMPETITIVE matches only
+# s5_competitive_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 1, api_key)
+# 
+# # Get QUICK MATCH matches only
+# s5_quick_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 0, api_key)
+# 
+# # Convert to dataframes
+# if (!is.null(s5_competitive_matches)) {
+#   s5_comp_df <- bind_rows(s5_competitive_matches)
+#   s5_comp_df$mode <- "Competitive"
+#   write.csv(s5_comp_df, here("output/s5_competitive_matches.csv"), row.names = FALSE)
+#   print(paste("Season 5 Competitive matches:", nrow(s5_comp_df)))
+# }
+# 
+# if (!is.null(s5_quick_matches)) {
+#   s5_quick_df <- bind_rows(s5_quick_matches)
+#   s5_quick_df$mode <- "Quick Match"
+#   write.csv(s5_quick_df, here("output/s5_quick_matches.csv"), row.names = FALSE)
+#   print(paste("Season 5 Quick matches:", nrow(s5_quick_df)))
+# }
 ```
 
-```{r}
-# ------------------------------
-# Load libraries
-# ------------------------------
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(tidyr)
-
-# ------------------------------
-# API key and user info
-# ------------------------------
-api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"        # Your API key
-USERNAME <- "kpil11"    # Your username
-SEASON <- "5"           # Season number
-
-# ------------------------------
-# 1️⃣ Get leaderboard and flatten nested players
-# ------------------------------
-get_leaderboard <- function(api_key, page = 1, limit = 50) {
-  res <- GET(
-    url = "https://marvelrivalsapi.com/api/v2/players/leaderboard",
-    query = list(page = page, limit = limit),
-    add_headers(`x-api-key` = api_key)
-  )
-  
-  if (status_code(res) != 200) stop("Failed to fetch leaderboard")
-  
-  data <- fromJSON(content(res, "text", encoding = "UTF-8"), flatten = TRUE)
-  leaderboard <- as_tibble(data)
-  
-  # Unnest the 'players' column
-  leaderboard_flat <- leaderboard %>% select(players) %>% unnest(players)
-  
-  # Select useful columns
-  leaderboard_summary <- leaderboard_flat %>%
-    select(
-      player_username = name,        # player name
-      score,                         # total score
-      rank_score = rank.rank_score,  # numeric rank
-      win_rate = rank.win_rate,      # win rate as string
-      level = rank.level              # player level
-    )
-  
-  return(leaderboard_summary)
-}
-
-leaderboard_summary <- get_leaderboard(api_key)
-
-# ------------------------------
-# 2️⃣ Get match history for user
-# ------------------------------
-get_matches_by_mode <- function(username, season, game_mode, api_key) {
-  response <- GET(
-    url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
-    query = list(season = season, game_mode = game_mode),
-    add_headers("x-api-key" = api_key)
-  )
-  
-  if (status_code(response) == 200) {
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    if (!is.null(data$match_history)) {
-      df <- bind_rows(data$match_history)
-      df <- df %>% mutate(player_username = username)  # add username column
-      return(df)
-    }
-  }
-  return(NULL)
-}
-
-# Get Competitive and Quick Match data
-comp_df <- get_matches_by_mode(USERNAME, SEASON, 1, api_key)
-quick_df <- get_matches_by_mode(USERNAME, SEASON, 0, api_key)
-
-if (!is.null(comp_df)) comp_df$mode <- "Competitive"
-if (!is.null(quick_df)) quick_df$mode <- "Quick Match"
-
-matches_df <- bind_rows(comp_df, quick_df)
-
-
-library(dplyr)
-library(tidyr)
-
-# Unnest match_player safely with a prefix
-matches_df_flat <- matches_df %>%
-  unnest(match_player, names_sep = "_")
-
-# Check column names
-colnames(matches_df_flat)
-
-
-# ------------------------------
-# 3️⃣ Summarize your matches by character & role
-# ------------------------------
-matches_summary <- matches_df_flat %>%
-  group_by(
-    player_username, 
-    character_name = match_player_player_hero,  # the hero/character
-    role = match_player_camp                     # the role (Vanguard, Duelist, Healer)
-  ) %>%
-  summarise(
-    matches = n(),
-    wins = sum(match_player_is_win, na.rm = TRUE), # this is logical or 1/0
-    win_rate = wins / matches,
-    .groups = "drop"
-  )
-colnames(matches_summary)
-
-# ------------------------------
-# 4️⃣ Combine with leaderboard info
-# ------------------------------
-
-leaderboard_summary <- leaderboard_summary %>%
-  rename(
-    leaderboard_win_rate = win_rate
-  )
-
-comparison_df <- matches_summary %>%
-  left_join(leaderboard_summary, by = "player_username") %>%
-  arrange(desc(win_rate))  # now win_rate is still from your matches
-
-# ------------------------------
-# 5️⃣ Preview and save CSVs
-# ------------------------------
-head(comparison_df)
-
-write.csv(matches_df, "matches_combined.csv", row.names = FALSE)
-write.csv(comparison_df, "summary_comparison.csv", row.names = FALSE)
-write.csv(leaderboard_summary, "leaderboard_summary.csv", row.names = FALSE)
-
-
-
-```
-# Marvel Rivals API
+## S4 - Marvel Rivals API
 Season 4
 ```{r}
 # Marvel Rivals API
 
+# # Your API key
+# api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
+# USERNAME <- "kpil11"
+# SEASON <- "4"  # Season 4
+# 
+# # Game mode values (based on API documentation):
+# # 0 = Quick Match
+# # 1 = Competitive/Ranked
+# 
+# # Function to get match history by game mode
+# get_matches_by_mode <- function(username, season, game_mode, api_key) {
+#   response <- GET(
+#     url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
+#     query = list(
+#       season = season,
+#       game_mode = game_mode
+#     ),
+#     add_headers("x-api-key" = api_key)
+#   )
+#   
+#   if (status_code(response) == 200) {
+#     data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+#     return(data$match_history)
+#   } else {
+#     warning(paste("Error:", status_code(response)))
+#     return(NULL)
+#   }
+# }
+# 
+# # Get COMPETITIVE matches only
+# s4_competitive_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 1, api_key)
+# 
+# # Get QUICK MATCH matches only
+# s4_quick_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 0, api_key)
+# 
+# # Convert to dataframes
+# if (!is.null(s4_competitive_matches)) {
+#   s4_comp_df <- bind_rows(s4_competitive_matches)
+#   s4_comp_df$mode <- "Competitive"
+#   write.csv(s4_comp_df, here("output/s4_competitive_matches.csv"), row.names = FALSE)
+#   print(paste("Season 4 Competitive matches:", nrow(s4_comp_df)))
+# }
+# 
+# if (!is.null(s4_quick_matches)) {
+#   s4_quick_df <- bind_rows(s4_quick_matches)
+#   s4_quick_df$mode <- "Quick Match"
+#   write.csv(s4_quick_df, here("output/s4_quick_matches.csv"), row.names = FALSE)
+#   print(paste("Season 4 Quick matches:", nrow(s4_quick_df)))
+# }
+```
+
+## S3 - Marvel Rivals API
+Season 3
+```{r}
+# Marvel Rivals API
+
 # Your API key
-api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
-USERNAME <- "kpil11"
-SEASON <- "4"  # Season 4
-
-# Game mode values (based on API documentation):
-# 0 = Quick Match
-# 1 = Competitive/Ranked
-
-# Function to get match history by game mode
-get_matches_by_mode <- function(username, season, game_mode, api_key) {
-  response <- GET(
-    url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
-    query = list(
-      season = season,
-      game_mode = game_mode
-    ),
-    add_headers("x-api-key" = api_key)
-  )
-  
-  if (status_code(response) == 200) {
-    data <- fromJSON(content(response, "text", encoding = "UTF-8"))
-    return(data$match_history)
-  } else {
-    warning(paste("Error:", status_code(response)))
-    return(NULL)
-  }
-}
-
-# Get COMPETITIVE matches only
-s4_competitive_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 1, api_key)
-
-# Get QUICK MATCH matches only
-s4_quick_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 0, api_key)
-
-# Convert to dataframes
-if (!is.null(s4_competitive_matches)) {
-  comp_df <- bind_rows(s4_competitive_matches)
-  comp_df$mode <- "Competitive"
-  write.csv(comp_df, "competitive_matches.csv", row.names = FALSE)
-  print(paste("Competitive matches:", nrow(comp_df)))
-}
-
-if (!is.null(s4_quick_matches)) {
-  quick_df <- bind_rows(s4_quick_matches)
-  quick_df$mode <- "Quick Match"
-  write.csv(quick_df, "quick_matches.csv", row.names = FALSE)
-  print(paste("Quick matches:", nrow(quick_df)))
-}
+# api_key <- "eb86e90ed5b97e7e59b61602423419d9477d9d7f7481901ad3cc1b9ad9124271"
+# USERNAME <- "kpil11"
+# SEASON <- "3"  # Season 3
+# 
+# # Game mode values (based on API documentation):
+# # 0 = Quick Match
+# # 1 = Competitive/Ranked
+# 
+# # Function to get match history by game mode
+# get_matches_by_mode <- function(username, season, game_mode, api_key) {
+#   response <- GET(
+#     url = paste0("https://marvelrivalsapi.com/api/v1/player/", username, "/match-history"),
+#     query = list(
+#       season = season,
+#       game_mode = game_mode
+#     ),
+#     add_headers("x-api-key" = api_key)
+#   )
+#   
+#   if (status_code(response) == 200) {
+#     data <- fromJSON(content(response, "text", encoding = "UTF-8"))
+#     return(data$match_history)
+#   } else {
+#     warning(paste("Error:", status_code(response)))
+#     return(NULL)
+#   }
+# }
+# 
+# # Get COMPETITIVE matches only
+# s3_competitive_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 1, api_key)
+# 
+# # Get QUICK MATCH matches only
+# s3_quick_matches <- get_matches_by_mode(USERNAME, SEASON, game_mode = 0, api_key)
+# 
+# # Convert to dataframes
+# if (!is.null(s3_competitive_matches)) {
+#   s3_comp_df <- bind_rows(s3_competitive_matches)
+#   s3_comp_df$mode <- "Competitive"
+#   write.csv(s3_comp_df, here("output/s3_competitive_matches.csv"), row.names = FALSE)
+#   print(paste("Season 3 Competitive matches:", nrow(s3_comp_df)))
+# }
+# 
+# if (!is.null(s3_quick_matches)) {
+#   s3_quick_df <- bind_rows(s3_quick_matches)
+#   s3_quick_df$mode <- "Quick Match"
+#   write.csv(s3_quick_df, here("output/s3_quick_matches.csv"), row.names = FALSE)
+#   print(paste("Season 3 Quick matches:", nrow(s3_quick_df)))
+# }
+```
+# Only Competitive From season 3-5
+# maybe delete
+```{r}
+# # Define seasons you want
+# seasons <- 3:6
+# game_mode <- 1  # Competitive
+# 
+# # Store all results
+# all_matches <- list()
+# 
+# # Loop through seasons
+# for (season in seasons) {
+#   cat("Fetching Season", season, "...\n")
+#   
+#   matches <- get_matches_by_mode(USERNAME, season, game_mode, api_key)
+#   
+#   if (!is.null(matches)) {
+#     df <- bind_rows(matches)
+#     df$season <- season
+#     df$mode <- "Competitive"
+#     all_matches[[as.character(season)]] <- df
+#     cat("  Got", nrow(df), "matches\n")
+#   }
+#   
+#   # Wait between requests to avoid rate limit
+#   Sys.sleep(5)  # Adjust this if you still get 429 errors
+# }
+# 
+# # Combine all seasons
+# all_seasons_df <- bind_rows(all_matches)
+# write.csv(all_seasons_df, here("output/s3_s6_competitive.csv"), row.names = FALSE)
 ```
 
 
