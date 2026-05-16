@@ -17,6 +17,9 @@ Which hero do I use the most and what type of role is it?
 What is my kill to death ratio for each hero and role used?
 Which role do I win the most with?
 ```
+## Marvel Rival Infographic
+<img width="1039" height="1558" alt="mr_info" src="https://github.com/user-attachments/assets/b6cbbc02-8668-4aaa-b852-61914b79a049" />
+
 
 ## Data
 
@@ -132,3 +135,4 @@ These are the type of games modes offered by Marvel Rivals, however I am compari
 | Domination | King of the Hill |
 | Convergence | Hybrid (capture + escort) |
 ```
+
