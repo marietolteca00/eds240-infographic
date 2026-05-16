@@ -82,7 +82,7 @@ hero_polar <- hero_kd_summary %>%
 bg_data <- hero_polar %>% distinct(hero_name, role_color)
 ```
 
-## Plot
+## Plot - Kill vs Death Comparison
 ```{r}
 #| fig-width: 13
 #| fig-height: 14
@@ -105,17 +105,20 @@ kd_plot1 <- hero_polar %>%
     xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf
   ) +
   scale_fill_identity() +
+  # Images for Heroes
   geom_from_path(
     data = hero_polar %>% distinct(hero_name, .keep_all = TRUE),
     aes(x = 0, y = 0, path = image_url),
     width = 0.36, vjust = 0.54
   ) +
+  # Size of Columns
   geom_col(
     aes(x = 5, y = pct,
         fill = ifelse(stat_label == "Kills", "#99381E", "#4E5472")),
     width = 4.2, alpha = 0.8,
     color = "#4D4E40", linewidth = 0.6
   ) +
+  # Percent Ratios
   geom_text(
     data = . %>% filter(value > 0),
     aes(x = 4.8, y = y_pos,
@@ -130,6 +133,7 @@ kd_plot1 <- hero_polar %>%
   facet_wrap(~hero_name, ncol = 4) +
   scale_fill_identity() +
   coord_polar("y") +
+  # Background of Heroes
   xlim(-1, 8) +
   labs(title = title_kd, caption = make_caption()) +
   theme_void() +
@@ -202,7 +206,7 @@ role_stats4 <- role_stats4 %>%
   ungroup()
 ```
 
-## Plot
+## Plot - 
 ```{r, warning=FALSE}
 #| fig-width: 10
 #| fig-height: 5
@@ -330,6 +334,8 @@ showtext_auto(enable = FALSE)
 # Plot 3 — Hero Duration
 ## Data Prep
 ```{r}
+# ── Role colors ──────────────────────────────────────────────
+
 role_colors_hex <- c(
   "Duelist"    = "#C58D12",
   "Vanguard"   = "#D55E00",
@@ -349,6 +355,8 @@ top_heroes <- hero_usage %>%
   slice_max(order_by = total_duration_min, n = 10) %>%
   mutate(hero_name = str_to_title(hero_name))
 
+# ── Data ──────────────────────────────────────────────────────
+
 max_hours_scalar <- max(top_heroes$total_duration_hours, na.rm = TRUE)
 
 # Join image URLs from hero_kd_summary (title-cased to match)
@@ -363,7 +371,7 @@ plot_df <- top_heroes %>%
 
 hero_order <- plot_df$hero_name
 
-# Build composite portraits
+# ── Portrait maker ────────────────────────────────────────────
 SIZE <- 160L
 
 make_composite_portrait <- function(image_url, fraction, role, hero_name) {
@@ -420,12 +428,16 @@ message("Done.")
 #| fig-height: 8
 #| out-width: "100%"
 
+# ── Enable showtext (correct function name) ───────────────────
+
 showtext_auto(enable = TRUE)
 showtext_opts(dpi = 300)
 
 title_dur <- glue::glue(
   "<span style='font-family:noto-sans; font-weight:bold;'>Where Did My Time Go? A Hero Usage Breakdown (Hours)</span>"
 )
+
+# ── Plot ──────────────────────────────────────────────────────
 
 max_h <- max_hours_scalar
 
