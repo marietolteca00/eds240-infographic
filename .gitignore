@@ -6,6 +6,10 @@
 .RData
 .RDataTmp
 
+# Not sure what these are but they keep popping up
+/81DF694C
+/shared
+
 # Data
 /data
 #Image folder
